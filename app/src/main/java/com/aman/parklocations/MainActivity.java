@@ -9,6 +9,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private final String TAG = "MainAct";
     private GoogleApiClient googleApiClient;
     private final int PERMISSION_CODE = 123;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
                 .build();
+
+        // set up RecyclerView
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // set up Adapter for RecyclerView
+        
     }
 
     /* this callback is called when GoogleApiClient is successfully connected */
@@ -65,17 +75,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.e(TAG, "onConnectionSuspended() called");
     }
 
     @Override
     public void onLocationChanged(Location location) {
         Log.v(TAG, "onLocationChanged() called - lat = " + location.getLatitude() + " lon = " + location.getLongitude());
+        getData();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.e(TAG, "onConnectionFailed() called");
     }
 
     private void startLocationUpdates() {
@@ -85,7 +96,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             LocationRequest locationRequest = LocationRequest.create().setPriority(LocationRequest.PRIORITY_LOW_POWER);
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         } catch (SecurityException exc) {
-            Log.v(TAG, "location security exception");
+            Log.e(TAG, "location security exception");
         }
+    }
+
+    private void getData() {
+        DataRetriever dataRetriever = new DataRetriever(getApplicationContext());
+        dataRetriever.retrieve();
     }
 }
