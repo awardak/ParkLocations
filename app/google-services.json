@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "160720392802",
+    "project_id": "parklocations"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160720392802:android:e673f61bcf5c25f6",
+        "android_client_info": {
+          "package_name": "com.aman.parklocations"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160720392802-dthsekesncs3rq5ojfkdo3fjo29ggv4o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aman.parklocations",
+            "certificate_hash": "F3192F65768CC9A8E054052AF6349DE2F6310064"
+          }
+        },
+        {
+          "client_id": "160720392802-nf2jc7ilho4uqpghkooa0coikkqf8bcb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1kzlVEaIX1KDDltN3RjY8QIANSYYAh6E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
