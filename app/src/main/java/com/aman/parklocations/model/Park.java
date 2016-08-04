@@ -1,8 +1,5 @@
-package com.aman.parklocations;
+package com.aman.parklocations.model;
 
-/**
- * Created by user on 7/31/16.
- */
 public class Park {
     private String name;
     private String managerName;

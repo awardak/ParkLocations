@@ -3,6 +3,7 @@ package com.aman.parklocations;
 import android.content.Context;
 import android.util.Log;
 
+import com.aman.parklocations.model.Park;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -16,9 +17,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by user on 7/30/16.
- */
 public class DataRetriever {
     private Context context;
     private final String TAG = "DataRetriever";
@@ -30,7 +28,7 @@ public class DataRetriever {
     }
 
     /*
-    retrieve() uses the Volley library to retrieve park data from the API endpoint and stores that data in a list.
+    retrieve() uses the Volley library to retrieve park data from the API endpoint and stores that data in a list
      */
     public void retrieve() {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL_BASE, null, new Response.Listener<JSONArray>() {

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/parkName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Park Name"
+        android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/parkMgr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manager Name"
+        android:textSize="14sp"/>
+    <TextView
+        android:id="@+id/parkEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mgr@park.gov"
+        android:textSize="14sp"/>
+    <TextView
+        android:id="@+id/parkPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(415) 733 - 2345"
+        android:textSize="14sp"/>
+
+</LinearLayout>

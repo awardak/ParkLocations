@@ -12,18 +12,40 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.aman.parklocations.model.Park;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener{
     private final String TAG = "MainAct";
     private GoogleApiClient googleApiClient;
     private final int PERMISSION_CODE = 123;
     private RecyclerView recyclerView;
+    ParkAdapter parkAdapter;
+    DataRetriever dataRetriever;
+
+    private final String URL_BASE = "https://data.sfgov.org/resource/94uf-amnx.json";
+    private List<Park> parkList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +64,97 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // set up Adapter for RecyclerView
-        
+        dataRetriever = new DataRetriever(getApplicationContext());
+        parkAdapter = new ParkAdapter(dataRetriever.getParkList());
+        recyclerView.setAdapter(parkAdapter);
+
+        retrieve();
+    }
+
+    private class ParkAdapter extends RecyclerView.Adapter<ParkViewHolder> {
+        private List<Park> parks;
+
+        public ParkAdapter(List<Park> parks) {
+            this.parks = parks;
+        }
+
+        @Override
+        public ParkViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View listItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_park, parent, false);
+            return new ParkViewHolder(listItem);
+        }
+
+        @Override
+        public void onBindViewHolder(ParkViewHolder holder, int position) {
+            Park park = parks.get(position);
+            holder.bindData(park);
+        }
+
+        @Override
+        public int getItemCount() {
+            return parks.size();
+        }
+    }
+    private class ParkViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+        private TextView parkName;
+        private TextView parkMgr;
+        private TextView parkEmail;
+        private TextView parkPhone;
+
+        public ParkViewHolder(View itemView) {
+            super(itemView);
+
+            parkName = (TextView)itemView.findViewById(R.id.parkName);
+            parkMgr = (TextView)itemView.findViewById(R.id.parkMgr);
+            parkEmail = (TextView)itemView.findViewById(R.id.parkEmail);
+            parkPhone = (TextView)itemView.findViewById(R.id.parkPhone);
+        }
+
+        public void bindData(Park park) {
+            parkName.setText(park.getName());
+            parkMgr.setText(park.getManagerName());
+            parkEmail.setText(park.getEmail());
+            parkPhone.setText(park.getPhone());
+        }
+
+        @Override
+        public void onClick(View view) {
+
+        }
+    }
+
+    public void retrieve() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL_BASE, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    Log.v(TAG, "response.length(): " + response.length());
+
+                    for (int i = 1; i < response.length(); ++i) {
+                        JSONObject obj = response.getJSONObject(i);
+
+                        Park park = new Park(obj.getString("parkname"),
+                                obj.getString("psamanager"),
+                                obj.getString("email"),
+                                obj.getString("number"));
+
+                        parkList.add(park);
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getLocalizedMessage());
+                }
+                parkAdapter = new ParkAdapter(parkList);
+                recyclerView.setAdapter(parkAdapter);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "ERROR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(getApplicationContext()).add(jsonArrayRequest);
     }
 
     /* this callback is called when GoogleApiClient is successfully connected */
@@ -81,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onLocationChanged(Location location) {
         Log.v(TAG, "onLocationChanged() called - lat = " + location.getLatitude() + " lon = " + location.getLongitude());
-        getData();
     }
 
     @Override
@@ -98,10 +209,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } catch (SecurityException exc) {
             Log.e(TAG, "location security exception");
         }
-    }
-
-    private void getData() {
-        DataRetriever dataRetriever = new DataRetriever(getApplicationContext());
-        dataRetriever.retrieve();
     }
 }
