@@ -5,12 +5,17 @@ public class Park {
     private String managerName;
     private String email;
     private String phone;
+    private String latitude;
+    private String longitude;
+    private float distanceFromUser;
 
-    public Park(String name, String managerName, String email, String phone) {
+    public Park(String name, String managerName, String email, String phone, String latitude, String longitude) {
         this.name = name;
         this.managerName = managerName;
         this.email = email;
         this.phone = phone;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getName() {
@@ -44,4 +49,22 @@ public class Park {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getLatitude() { return latitude; }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public float getDistanceFromUser() { return distanceFromUser; }
+
+    public void setDistanceFromUser(float distanceFromUser) { this.distanceFromUser = distanceFromUser; }
 }
