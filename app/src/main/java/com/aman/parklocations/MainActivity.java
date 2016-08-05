@@ -188,11 +188,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Collections.sort(parkList, new Comparator<Park>() {
             @Override
             public int compare(Park p1, Park p2) {
-                /*if (p1.getDistanceFromUser() < -0.5)
-                    return 1;
-                if (p2.getDistanceFromUser() < -0.5)
-                    return -1;
-*/
                 return (int) (p1.getDistanceFromUser() - p2.getDistanceFromUser());
             }
         });
